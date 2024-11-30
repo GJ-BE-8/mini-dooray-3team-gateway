@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>회원가입</title>
+</head>
+<body>
+<h1>회원가입</h1>
+<form id="registerForm">
+  <label for="username">이름:</label>
+  <input type="text" id="username" name="username" required><br>
+
+  <label for="email">이메일:</label>
+  <input type="email" id="email" name="email" required><br>
+
+  <label for="password">비밀번호:</label>
+  <input type="password" id="password" name="password" required><br>
+  <label for="role">역할:</label>
+  <select id="role" name="role" required>
+    <option value="MEMBER">회원</option>
+    <option value="ADMIN">관리자</option>
+  </select><br>
+
+  <label for="status">상태:</label>
+  <select id="status" name="status" required>
+    <option value="ACTIVE">활성</option>
+    <option value="DORMANT">휴면</option>
+    <option value="DELETED">삭제됨</option>
+  </select><br>
+  <button type="button" id="submitButton">회원가입</button>
+</form>
+<a href="/">홈으로</a>
+
+<script>
+  document.getElementById('submitButton').addEventListener('click', function () {
+    const form = document.getElementById('registerForm');
+    const formData = new FormData(form);
+
+    const data = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+
+    fetch('/accounts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+            .then(response => {
+              if (response.ok) {
+                alert('회원가입이 완료되었습니다.');
+              } else {
+                alert('회원가입 실패!');
+              }
+            })
+            .catch(error => console.error('Error:', error));
+  });
+
+</script>
+</body>
+</html>

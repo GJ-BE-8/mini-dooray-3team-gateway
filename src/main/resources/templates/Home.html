@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <title>Home</title>
+</head>
+<body>
+Welcome, <span th:text="${loginName}" /><br />
+
+<a href="/auth/login"><button>로그인</button></a>
+<a href="/register"><button>회원가입</button></a>
+<a href="/logout"><button>로그아웃</button></a>
+</body>
+</html>
