@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create Project</title>
+  <script>
+    async function submitForm(event) {
+      event.preventDefault();
+
+      const name = document.getElementById('name').value;
+      const status = document.getElementById('status').value;
+
+      const requestData = {
+        name: name,
+        status: status
+      };
+
+      try {
+        const response = await fetch('/projects', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (response.ok) {
+          alert('Project created successfully!');
+          window.location.href = '/';
+        } else {
+          const errorData = await response.json();
+          alert(`Failed to create project: ${errorData.message || 'Unknown error'}`);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>Create New Project</h1>
+<form onsubmit="submitForm(event)">
+  <div>
+    <label for="name">Project Name:</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="status">Project Status:</label>
+    <select id="status" name="status" required>
+      <option value="ACTIVE">Active</option>
+      <option value="INACTIVE">Inactive</option>
+    </select>
+  </div>
+  <div>
+    <button type="submit">Create Project</button>
+  </div>
+</form>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<script>
+  async function submitForm(event) {
+    event.preventDefault();
+
+    const userId = document.getElementById('userId').value;
+    const role = document.getElementById('role').value;
+    const projectId = document.getElementById('projectId').value;
+
+    const requestData = {
+      userId: userId,
+      role: role
+    };
+
+    const response = await fetch(`/projects/${projectId}/members`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
+    });
+
+    if (response.ok) {
+      alert('Member added successfully!');
+      window.location.href = `/projects/${projectId}`;
+    } else {
+      const errorData = await response.json();
+      alert('Error: ' + (errorData.message || 'Unknown error'));
+    }
+  }
+</script>
+
+<form onsubmit="submitForm(event)">
+  <div>
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" required />
+  </div>
+  <div>
+    <label for="role">Role:</label>
+    <select id="role" required>
+      <option value="ADMIN">Admin</option>
+      <option value="MEMBER">Member</option>
+    </select>
+  </div>
+  <input type="hidden" id="projectId" th:value="${projectId}" />
+  <button type="submit">Add Member</button>
+</form>

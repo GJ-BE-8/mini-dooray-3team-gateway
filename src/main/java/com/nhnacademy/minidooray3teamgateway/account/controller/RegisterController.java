@@ -1,17 +1,15 @@
 package com.nhnacademy.minidooray3teamgateway.account.controller;
 
 
-import com.nhnacademy.minidooray3teamgateway.account.domain.Account;
 import com.nhnacademy.minidooray3teamgateway.account.dto.AccountModifyDto;
 import com.nhnacademy.minidooray3teamgateway.account.dto.AccountRegisterDto;
 import com.nhnacademy.minidooray3teamgateway.account.feign.RegisterServiceClient;
-import com.nhnacademy.minidooray3teamgateway.task.user.UserServiceClient;
-import com.nhnacademy.minidooray3teamgateway.task.user.dto.UserDTO;
+import com.nhnacademy.minidooray3teamgateway.taskApi.user.UserServiceClient;
+import com.nhnacademy.minidooray3teamgateway.taskApi.user.dto.UserDTO;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

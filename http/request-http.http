@@ -7,9 +7,12 @@ GET localhost:8080/accounts/user@example.com
 ### 프로젝트 생성
 POST http://localhost:8080/projects
 Content-Type: application/json
-X-User-Id: admin-user
+X-User-Id: 141414
 
 {
-  "name": "New Project",
+  "name": "New Pr3333oject",
   "status": "ACTIVE"
 }
+
+
+###

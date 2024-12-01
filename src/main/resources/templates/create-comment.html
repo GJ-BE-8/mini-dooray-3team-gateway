@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${pageTitle}">Create/Edit Comment</title>
+  <script>
+    async function submitComment(event) {
+      event.preventDefault(); // 기본 폼 동작 방지
+
+      // 폼 데이터 가져오기
+      const content = document.getElementById('content').value;
+      const projectId = /*[[${projectId}]]*/ ''; // Thymeleaf로 동적으로 삽입
+      const taskId = /*[[${taskId}]]*/ ''; // Thymeleaf로 동적으로 삽입
+      const userId = document.getElementById('userId').value; // 히든 필드에서 userId 가져오기
+
+      if (!content.trim()) {
+        alert("Comment content cannot be empty!");
+        return;
+      }
+
+      const commentData = { content: content };
+
+      try {
+        // JSON 데이터로 POST 요청 보내기
+        const response = await fetch(`/projects/${projectId}/tasks/${taskId}/comments`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-User-Id': userId, // userId 추가
+          },
+          body: JSON.stringify(commentData),
+        });
+
+        if (response.redirected) {
+          window.location.href = response.url;
+        } else if (response.ok) {
+          alert("Comment submitted successfully!");
+          window.location.href = `/projects/${projectId}/tasks/${taskId}`;
+        } else {
+          const error = await response.json();
+          alert("Error submitting comment: " + (error.message || "Unknown error"));
+        }
+      } catch (error) {
+        console.error("Error:", error);
+        alert("An error occurred while submitting the comment.");
+      }
+    }
+  </script>
+</head>
+<body>
+<h1 th:text="${pageTitle}">Create/Edit Comment</h1>
+
+<form onsubmit="submitComment(event)">
+  <!-- 사용자 ID를 히든 필드로 전달 -->
+  <input type="hidden" id="userId" th:value="${userId}" />
+
+  <div>
+    <label for="content">Comment Content:</label>
+    <textarea id="content" name="content" placeholder="Write your comment here..." required></textarea>
+  </div>
+  <button type="submit" th:text="${buttonText}">Submit</button>
+</form>
+
+<!-- Back to Task Details -->
+<a th:href="@{/projects/{projectId}/tasks/{taskId}(projectId=${projectId}, taskId=${taskId})}">
+  <button type="button">Cancel</button>
+</a>
+</body>
+</html>

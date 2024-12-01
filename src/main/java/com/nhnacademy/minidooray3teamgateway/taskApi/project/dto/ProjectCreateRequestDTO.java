@@ -1,4 +1,4 @@
-package com.nhnacademy.minidooray3teamgateway.project.dto;
+package com.nhnacademy.minidooray3teamgateway.taskApi.project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

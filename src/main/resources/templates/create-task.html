@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create Task</title>
+  <script>
+    async function submitTask(event) {
+      event.preventDefault(); // 기본 폼 동작 방지
+
+      // 프로젝트 ID 가져오기
+      const projectId = document.getElementById('project-id').value;
+      const title = document.getElementById('title').value;
+      const description = document.getElementById('description').value;
+      const milestoneId = document.getElementById('milestone').value;
+
+      // 값 검증
+      if (!projectId) {
+        alert("Project ID is missing!");
+        return;
+      }
+      if (!milestoneId) {
+        alert("Please select a milestone.");
+        return;
+      }
+
+      // JSON 데이터 생성
+      const taskData = {
+        projectMemberId: 1, // 정적 데이터, 필요 시 동적으로 변경
+        title: title,
+        description: description,
+        milestoneId: milestoneId
+      };
+
+      try {
+        // 서버로 POST 요청 전송
+        const response = await fetch(`/projects/${projectId}/tasks`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(taskData),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.redirectUrl) {
+            window.location.href = result.redirectUrl;
+          } else {
+            alert('Task created successfully!');
+          }
+        } else {
+          const error = await response.json();
+          alert('Error creating task: ' + (error.error || 'Unknown error'));
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+        console.error('Error:', error);
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>Create New Task</h1>
+
+<!-- Project ID를 숨겨서 전달 -->
+<input type="hidden" id="project-id" th:value="${projectId}" />
+
+<form onsubmit="submitTask(event)">
+  <div>
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" required />
+  </div>
+  <div>
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" required></textarea>
+  </div>
+  <div>
+    <label for="milestone">Milestone:</label>
+    <select id="milestone" name="milestoneId" required>
+      <option value="" disabled selected>Select Milestone</option>
+      <option th:each="milestone : ${milestones}"
+              th:value="${milestone.id}"
+              th:text="${milestone.name}">
+        Default Milestone
+      </option>
+    </select>
+  </div>
+  <button type="submit">Create Task</button>
+</form>
+</body>
+</html>

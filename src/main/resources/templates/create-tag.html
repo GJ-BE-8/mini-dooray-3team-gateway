@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create Tag</title>
+  <script>
+    async function submitTag(event) {
+      event.preventDefault();
+
+      const projectId = document.getElementById('project-id').value;
+      const name = document.getElementById('name').value;
+
+      const tagData = {
+        name: name
+      };
+
+      try {
+        const response = await fetch(`/projects/${projectId}/tags`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(tagData),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.redirectUrl) {
+            window.location.href = result.redirectUrl;
+          } else {
+            throw new Error('Redirect URL not found in response.');
+          }
+        } else {
+          const error = await response.json();
+          alert('Error: ' + (error.error || 'Unknown error occurred.'));
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+        console.error('Error:', error);
+      }
+    }
+  </script>
+</head>
+<body>
+<h1>Create Tag</h1>
+
+<input type="hidden" id="project-id" th:value="${projectId}">
+
+<form onsubmit="submitTag(event)">
+  <div>
+    <label for="name">Tag Name:</label>
+    <input type="text" id="name" name="name" required>
+  </div>
+  <div>
+    <button type="submit">Submit</button>
+  </div>
+</form>
+</body>
+</html>

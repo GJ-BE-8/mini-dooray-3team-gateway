@@ -1,7 +1,7 @@
-package com.nhnacademy.minidooray3teamgateway.task.user;
+package com.nhnacademy.minidooray3teamgateway.taskApi.user;
 
 
-import com.nhnacademy.minidooray3teamgateway.task.user.dto.UserDTO;
+import com.nhnacademy.minidooray3teamgateway.taskApi.user.dto.UserDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Check</title>
+</head>
+<body>
+<h1>Data Check</h1>
+
+<div>
+    <h2>Milestones</h2>
+    <ul>
+        <li th:each="milestone : ${milestones}" th:text="${milestone.name}">Milestone Name</li>
+    </ul>
+</div>
+
+
+<a href="/" style="text-decoration: none;">
+    <button style="padding: 10px 20px;">Return to Home</button>
+</a>
+</body>
+</html>

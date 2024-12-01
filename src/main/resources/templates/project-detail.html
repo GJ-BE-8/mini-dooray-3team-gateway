@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Project Details</title>
+  <script>
+    function submitFormAsJson(event) {
+      event.preventDefault();
+
+      const form = event.target;
+      const actionUrl = form.action;
+      const userId = form.querySelector('input[name="X-User-Id"]').value;
+
+      if (confirm('Are you sure you want to delete this project?')) {
+        fetch(actionUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-User-Id': userId
+          },
+          body: JSON.stringify({})
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert('Project deleted successfully!');
+                    window.location.href = '/';
+                  } else {
+                    alert('Failed to delete the project.');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  alert('An error occurred while deleting the project.');
+                });
+      }
+    }
+
+    // 멤버 삭제 요청
+    function removeMemberFromProject(projectId, memberUserId) {
+      const userId = document.getElementById('user-id').value;
+
+      if (confirm(`Are you sure you want to remove member ${memberUserId}?`)) {
+        fetch(`/projects/${projectId}/members/${memberUserId}/remove`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-User-Id': userId
+          },
+          body: JSON.stringify({})
+        })
+                .then(response => {
+                  if (response.ok) {
+                    alert(`Member ${memberUserId} removed successfully!`);
+                    location.reload(); // 성공 시 페이지 새로고침
+                  } else {
+                    alert('Failed to remove the member.');
+                  }
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                  alert('An error occurred while removing the member.');
+                });
+      }
+    }
+  </script>
+</head>
+<body>
+<!-- 로그인 사용자 ID 히든 필드 -->
+<input type="hidden" id="user-id" th:value="${loginName}" />
+
+<h1 th:text="${project.name}">Project Name</h1>
+<p>Status: <span th:text="${project.status}"></span></p>
+<p>Created At: <span th:text="${project.createdAt}"></span></p>
+
+<h2>Members</h2>
+<a th:href="@{/projects/{id}/members/new(id=${project.projectId})}">Add Member</a>
+<table style="border-collapse: collapse; width: 100%;">
+  <thead>
+  <tr>
+    <th style="border: 1px solid black; padding: 5px;">User ID</th>
+    <th style="border: 1px solid black; padding: 5px;">Role</th>
+    <th style="border: 1px solid black; padding: 5px;">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="member : ${project.projectMembers}">
+    <td style="border: 1px solid black; padding: 5px;" th:text="${member.userId}">user1</td>
+    <td style="border: 1px solid black; padding: 5px;" th:text="${member.role}">ADMIN</td>
+    <td style="border: 1px solid black; padding: 5px;">
+      <!-- 멤버 삭제 버튼 -->
+      <button type="button" onclick="removeMemberFromProject([[${project.projectId}]], '[[${member.userId}]]')">
+        Remove
+      </button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<h2>Tasks</h2>
+<div>
+  <a th:href="@{/projects/{id}/tasks(id=${project.projectId})}">View Tasks</a>
+</div>
+
+<!-- 프로젝트 삭제 폼 -->
+<form th:action="@{/projects/{id}/delete(id=${project.projectId})}" method="post" onsubmit="submitFormAsJson(event)">
+  <input type="hidden" name="X-User-Id" th:value="${loginName}" />
+  <button type="submit">
+    Delete Project
+  </button>
+</form>
+</body>
+</html>

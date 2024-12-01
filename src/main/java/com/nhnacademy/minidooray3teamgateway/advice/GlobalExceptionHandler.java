@@ -21,10 +21,10 @@ public class GlobalExceptionHandler {
         return "error-page";
     }
 
-    @ExceptionHandler(Exception.class)
-    public String handleException(Exception ex, Model model) {
-        model.addAttribute("errorMessage", "알 수 없는 오류가 발생했습니다.");
-        return "error-page";
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String handleException(Exception ex, Model model) {
+//        model.addAttribute("errorMessage", "알 수 없는 오류가 발생했습니다.");
+//        return "error-page";
+//    }
 }
 

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Task List</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 5px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    td {
+      word-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+<h1>Task List</h1>
+
+<div>
+  <a th:href="@{/projects/{projectId}/tasks/add(projectId=${projectId})}">
+    <button type="button">Add Task</button>
+  </a>
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>Task ID</th>
+    <th>Title</th>
+    <th>Description</th>
+    <th>Milestone</th>
+    <th>Tags</th>
+    <th>Comments</th>
+    <th>Created By</th>
+    <th>Created At</th>
+    <th>Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Tasks 반복 -->
+  <tr th:each="task : ${tasks}">
+    <td th:text="${task.taskId ?: '-'}">-</td>
+    <td th:text="${task.title ?: 'No Title'}">No Title</td>
+    <td th:text="${task.description ?: 'No Description'}">No Description</td>
+
+    <!-- Milestone 정보 -->
+    <td>
+      <span th:text="${task.mileStoneDto != null ? task.mileStoneDto.name : 'No Milestone'}">No Milestone</span>
+      <br>
+      <span th:text="'Status: ' + (task.mileStoneDto != null ? task.mileStoneDto.status : 'Unknown')">Status: Unknown</span>
+    </td>
+
+    <!-- Tags -->
+    <td>
+      <span th:each="tag : ${task.tags}" th:text="${tag.name} + ' '"></span>
+    </td>
+
+    <!-- Comments -->
+    <td>
+      <ul>
+        <li th:each="comment : ${task.comments}">
+          <strong th:text="'Comment by ' + comment.projectMember.userId"></strong>:
+          <span th:text="${comment.content}"></span>
+          <br>
+          <em th:text="${#temporals.format(comment.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></em>
+        </li>
+      </ul>
+    </td>
+
+    <!-- Created By -->
+    <td>
+      <span th:text="${task.createdBy.userId}"></span>
+      <br>
+      <span th:text="'Role: ' + task.createdBy.role"></span>
+    </td>
+
+    <!-- Created At -->
+    <td th:text="${#temporals.format(task.createdAt, 'yyyy-MM-dd HH:mm:ss')}">No Date</td>
+
+    <!-- Actions -->
+    <td>
+      <a th:href="@{/projects/{id}/tasks/{taskId}(id=${projectId}, taskId=${task.taskId})}">View</a> |
+      <a th:href="@{/projects/{id}/tasks/{taskId}/edit(id=${projectId}, taskId=${task.taskId})}">Edit</a> |
+      <a th:href="@{/projects/{id}/tasks/{taskId}/delete(id=${projectId}, taskId=${task.taskId})}"
+         onclick="return confirm('Are you sure?');">Delete</a>
+    </td>
+  </tr>
+  <!-- Tasks가 비어있을 경우 -->
+  <tr th:if="${tasks.empty}">
+    <td colspan="9" style="text-align: center;">No tasks available</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
