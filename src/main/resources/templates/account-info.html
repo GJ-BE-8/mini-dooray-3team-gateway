@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>회원 정보</title>
+</head>
+<body>
+<h1>회원 정보</h1>
+
+<table border="1">
+  <tr>
+    <th>회원 ID</th>
+    <td th:text="${accountInfoDto.accountId}">회원 ID</td>
+  </tr>
+  <tr>
+    <th>사용자 이름</th>
+    <td th:text="${accountInfoDto.username}">사용자 이름</td>
+  </tr>
+  <tr>
+    <th>이메일</th>
+    <td th:text="${accountInfoDto.email}">이메일</td>
+  </tr>
+  <tr>
+    <th>역할(Role)</th>
+    <td th:text="${accountInfoDto.role}">역할</td>
+  </tr>
+  <tr>
+    <th>상태(Status)</th>
+    <td th:text="${accountInfoDto.status}">상태</td>
+  </tr>
+</table>
+
+<a th:href="@{/accounts/{id}(id=${accountInfoDto.accountId})}">
+  <button>회원 정보 수정</button>
+</a>
+
+
+<form th:action="@{/accounts/info/delete/{accountId}(accountId=${accountInfoDto.accountId})}" method="post" style="display:inline;">
+  <button type="submit" onclick="return confirm('정말로 삭제하시겠습니까?');">회원 삭제</button>
+</form>
+
+
+<a href="/">홈으로</a>
+</body>
+</html>
+
