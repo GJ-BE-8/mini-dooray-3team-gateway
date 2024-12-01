@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>에러 발생</title>
+</head>
+<body>
+<h1>에러 발생</h1>
+<!-- 에러 메시지 표시 -->
+<p th:text="${errorMessage}"></p>
+
+<!-- 홈으로 돌아가는 버튼 -->
+<a href="/" style="text-decoration: none;">
+    <button style="padding: 10px 20px; font-size: 16px;">홈으로 돌아가기</button>
+</a>
+</body>
+</html>

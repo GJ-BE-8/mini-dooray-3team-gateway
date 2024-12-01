@@ -26,7 +26,7 @@ public interface RegisterServiceClient {
     public ResponseEntity<Account> updateAccount(@PathVariable Long accountId, @RequestBody  @Valid
     AccountModifyDto accountModifyDto);
 
-    @DeleteMapping("/{accountId}")
+    @PostMapping("/accounts/info/delete/{accountId}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long accountId);
 
     @GetMapping("/getId/{name}")

@@ -29,6 +29,16 @@
   </tr>
 </table>
 
+<a th:href="@{/accounts/{id}(id=${accountInfoDto.accountId})}">
+  <button>회원 정보 수정</button>
+</a>
+
+
+<form th:action="@{/accounts/info/delete/{accountId}(accountId=${accountInfoDto.accountId})}" method="post" style="display:inline;">
+  <button type="submit" onclick="return confirm('정말로 삭제하시겠습니까?');">회원 삭제</button>
+</form>
+
+
 <a href="/">홈으로</a>
 </body>
 </html>

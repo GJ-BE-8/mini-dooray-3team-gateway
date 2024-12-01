@@ -10,5 +10,6 @@ Welcome, <span th:text="${loginName}" /><br />
 <a href="/auth/login"><button>로그인</button></a>
 <a href="/register"><button>회원가입</button></a>
 <a href="/logout"><button>로그아웃</button></a>
+<a th:href="@{/accounts/info/{id}(id=${session.id})}"><button>내 계정 정보</button></a>
 </body>
 </html>
